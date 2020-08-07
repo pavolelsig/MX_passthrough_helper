@@ -76,10 +76,10 @@ echo $IDS
 
 if [ $INTEL = 1 ]
 	then
-	IOMMU="intel_iommu=on"
+	IOMMU="intel_iommu=on kvm.ignore_msrs=1"
 	echo "Set Intel IOMMU On"
 	else
-	IOMMU="amd_iommu=on"
+	IOMMU="amd_iommu=on kvm.ignore_msrs=1"
 	echo "Set AMD IOMMU On"
 fi
 
