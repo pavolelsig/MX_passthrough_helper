@@ -1,4 +1,4 @@
-# MX Linux passthrough_helper
+# MX Linux passthrough helper
 
 Passthrough helper for MX Linux
 
