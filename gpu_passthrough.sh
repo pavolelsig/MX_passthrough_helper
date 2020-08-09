@@ -97,6 +97,5 @@ echo 'vfio-pci' >> /etc/modules
 
 update-grub
 
-chmod +x ./uninstall.sh
 
 apt-get install qemu virt-manager libvirt-daemon libvirt-daemon-system qemu-kvm ovmf qemu-utils
