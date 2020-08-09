@@ -3,6 +3,7 @@
 #Adapted from PopOS guide
 #The purpose of this script is to bind all non-boot GPUs to the vfio driver MX Linux
 
+#Detecting CPU
 CPU=$(lscpu | grep GenuineIntel | rev | cut -d ' ' -f 1 | rev )
 
 INTEL="0"
@@ -73,7 +74,7 @@ done
 echo
 echo $IDS
 
-
+#Building string Intel or AMD iommu=on
 if [ $INTEL = 1 ]
 	then
 	IOMMU="intel_iommu=on kvm.ignore_msrs=1"
@@ -83,26 +84,19 @@ if [ $INTEL = 1 ]
 	echo "Set AMD IOMMU On"
 fi
 
-
+#Putting together new grub string
 OLD_OPTIONS=`cat /etc/default/grub | grep GRUB_CMDLINE_LINUX_DEFAULT | cut -d '"' -f 1,2`
-
-
-echo "#!/bin/bash" > uninstall.sh
-echo "$OLD_OPTIONS\"" >> uninstall.sh
 
 NEW_OPTIONS="$OLD_OPTIONS $IOMMU $IDS\""
 echo $NEW_OPTIONS
 
+#Rebuilding grub 
 sed -i -e "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${NEW_OPTIONS}|" /etc/default/grub
-
-cat /etc/modules >> modules.backup
 
 echo 'vfio-pci' >> /etc/modules
 
-echo "cp modules.backup /etc/modules" >> uninstall
-
 update-grub
 
-chmmod +x ./uninstall.sh
+chmod +x ./uninstall.sh
 
 apt-get install qemu virt-manager libvirt-daemon libvirt-daemon-system qemu-kvm ovmf qemu-utils
